@@ -102,22 +102,24 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans bg-[#040405] text-[#ececec]">
-      {/* 1. Dynamic Interactive Particle Background Canvas */}
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-[#ececec] bg-[#030406]">
+      {/* 1. Dynamic Interactive Particle & Semiconductor Matrix Canvas */}
       {!disableAnim && <BackgroundCanvas />}
 
-      {/* 2. Ambient NVIDIA Nebula Glow Layers */}
+      {/* 2. Exact 1:1 build.nvidia.com Top Aurora Mask Layer */}
       <div
-        className="fixed inset-x-0 -z-1 opacity-15 bg-[radial-gradient(ellipse_120%_60%_at_top,_#76B900_0%,_transparent_70%)] top-0 h-[450px] pointer-events-none"
-        aria-hidden="true"
-      />
-      <div
-        className="fixed inset-x-0 -z-1 opacity-10 bg-[radial-gradient(ellipse_120%_60%_at_bottom,_#00E5FF_0%,_transparent_70%)] bottom-0 h-[400px] pointer-events-none"
+        className="fixed inset-x-0 -z-1 opacity-18 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] top-0 h-[520px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)] [mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)]"
         aria-hidden="true"
       />
 
-      {/* 3. NVIDIA Build-Inspired Sticky App-Bar Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-[rgba(118,185,0,0.18)] bg-black/75 backdrop-blur-xl transition-all">
+      {/* 3. Exact 1:1 build.nvidia.com Bottom Ambient Glow Layer */}
+      <div
+        className="fixed inset-x-0 -z-1 opacity-14 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] bottom-0 h-[340px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)] [mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)]"
+        aria-hidden="true"
+      />
+
+      {/* 4. NVIDIA Build-Inspired Sticky App-Bar Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/70 backdrop-blur-xl transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div className="flex items-center space-x-3 shrink-0">
