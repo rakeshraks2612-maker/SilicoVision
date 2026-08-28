@@ -335,7 +335,7 @@ export default function App() {
         {activeTab === "Models" && <ModelsView onSelectModel={() => setActiveTab("Playground")} />}
         {activeTab === "Playground" && <PredictView />}
         {activeTab === "Telemetry" && <PerformanceView />}
-        {activeTab === "Dataset" && <DatasetView />}
+        {activeTab === "Dataset" && <DatasetView onNavigate={(tab) => setActiveTab(tab)} />}
         {activeTab === "ApiDocs" && <ApiDocsView />}
       </main>
 
