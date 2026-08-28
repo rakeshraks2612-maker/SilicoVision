@@ -114,51 +114,83 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#76B900]/15 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl space-y-6">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-black/80 backdrop-blur-md border border-[rgba(118,185,0,0.4)] text-[#76B900] shadow-[0_0_15px_rgba(118,185,0,0.25)]">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>NVIDIA NIM ARCHITECTURE FOR SEMICONDUCTOR FABRICATIONS</span>
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-black/80 backdrop-blur-md border border-[rgba(118,185,0,0.4)] text-[#76B900] shadow-[0_0_15px_rgba(118,185,0,0.25)]">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>NVIDIA NIM ARCHITECTURE FOR SEMICONDUCTOR FABRICATIONS</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
+              Deploy Enterprise-Grade{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#BFF230] via-white to-[#7CD7FE]">
+                Wafer Defect AI
+              </span>{" "}
+              at Silicon Scale.
+            </h1>
+
+            <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-2xl font-normal">
+              SilicoVision delivers deep learning vision microservices for automated wafer map defect classification on the{" "}
+              <span className="text-white font-semibold">WM-811K benchmark</span>. Accelerate root-cause isolation and optimize fab yield in real-time.
+            </p>
+
+            {/* Action CTAs */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                onClick={() => onNavigate?.("Playground")}
+                className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-[#76B900] text-black hover:bg-[#86d400] transition-all shadow-[0_0_30px_rgba(118,185,0,0.5)] hover:shadow-[0_0_40px_rgba(118,185,0,0.7)] cursor-pointer"
+              >
+                <Zap className="w-4 h-4 fill-current" />
+                <span>Launch Interactive Playground</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => onNavigate?.("Models")}
+                className="inline-flex items-center space-x-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-black/70 backdrop-blur-md border border-white/20 text-white hover:border-[rgba(118,185,0,0.6)] hover:bg-zinc-900/90 transition-all cursor-pointer"
+              >
+                <Cpu className="w-4 h-4 text-[#76B900]" />
+                <span>Browse NIM Models</span>
+              </button>
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
-            Deploy Enterprise-Grade{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#BFF230] via-white to-[#7CD7FE]">
-              Wafer Defect AI
-            </span>{" "}
-            at Silicon Scale.
-          </h1>
+          {/* Right Column: Live Hologram Wafer Radar Card */}
+          <div className="hidden lg:flex lg:col-span-5 justify-center">
+            <div className="relative p-6 rounded-2xl bg-black/80 backdrop-blur-xl border border-[rgba(118,185,0,0.35)] shadow-[0_0_40px_rgba(118,185,0,0.2)] flex flex-col items-center space-y-4">
+              <div className="flex items-center justify-between w-full text-xs font-mono text-zinc-400 border-b border-zinc-800 pb-2">
+                <span className="flex items-center space-x-1.5 text-[#76B900]">
+                  <span className="w-2 h-2 rounded-full bg-[#76B900] pulse-indicator" />
+                  <span className="font-bold">IN-LINE METROLOGY</span>
+                </span>
+                <span>300mm FOUP #084</span>
+              </div>
 
-          <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-2xl font-normal">
-            SilicoVision delivers deep learning vision microservices for automated wafer map defect classification on the{" "}
-            <span className="text-white font-semibold">WM-811K benchmark</span>. Accelerate root-cause isolation and optimize fab yield in real-time.
-          </p>
+              {/* Simulated Circular Holographic Wafer */}
+              <div className="relative w-48 h-48 rounded-full bg-[#10141c] border-2 border-[rgba(118,185,0,0.4)] flex items-center justify-center overflow-hidden shadow-[inset_0_0_25px_rgba(0,0,0,0.9)]">
+                {/* Rotating radar line */}
+                <div
+                  className="absolute inset-0 origin-center bg-gradient-to-r from-transparent via-[rgba(118,185,0,0.15)] to-transparent pointer-events-none"
+                  style={{ animation: "spin 4s linear infinite" }}
+                />
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <button
-              onClick={() => onNavigate?.("Playground")}
-              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-[#76B900] text-black hover:bg-[#86d400] transition-all shadow-[0_0_30px_rgba(118,185,0,0.5)] hover:shadow-[0_0_40px_rgba(118,185,0,0.7)] cursor-pointer"
-            >
-              <Zap className="w-4 h-4 fill-current" />
-              <span>Launch Interactive Playground</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+                {/* Concentric grid rings */}
+                <div className="w-36 h-36 rounded-full border border-zinc-800/80" />
+                <div className="absolute w-24 h-24 rounded-full border border-zinc-800/80" />
+                <div className="absolute w-12 h-12 rounded-full border border-zinc-800/80" />
 
-            <button
-              onClick={() => onNavigate?.("Models")}
-              className="inline-flex items-center space-x-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-black/70 backdrop-blur-md border border-white/20 text-white hover:border-[rgba(118,185,0,0.6)] hover:bg-zinc-900/90 transition-all cursor-pointer"
-            >
-              <Cpu className="w-4 h-4 text-[#76B900]" />
-              <span>Browse NIM Models</span>
-            </button>
+                {/* Glowing defect spots */}
+                <div className="absolute top-12 left-16 w-3 h-3 rounded-sm bg-[#76B900] shadow-[0_0_8px_#76B900]" />
+                <div className="absolute top-16 left-20 w-3 h-3 rounded-sm bg-[#76B900] shadow-[0_0_8px_#76B900]" />
+                <div className="absolute top-20 left-14 w-3 h-3 rounded-sm bg-[#76B900] shadow-[0_0_8px_#76B900]" />
+                <div className="absolute bottom-12 right-14 w-3 h-3 rounded-sm bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]" />
+              </div>
 
-            <button
-              onClick={() => onNavigate?.("ApiDocs")}
-              className="inline-flex items-center space-x-2 px-4 py-3.5 rounded-xl font-semibold text-sm text-zinc-400 hover:text-white transition-all cursor-pointer"
-            >
-              <Terminal className="w-4 h-4" />
-              <span>API Reference</span>
-            </button>
+              <div className="flex items-center justify-between w-full text-xs font-mono">
+                <span className="text-zinc-400">Yield Health:</span>
+                <span className="font-bold text-[#76B900]">98.7% (PASS)</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -230,7 +262,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 </div>
                 <button
                   onClick={() => onNavigate?.("Playground")}
-                  className="text-xs font-semibold text-white hover:text-[#76B900] flex items-center space-x-1 group"
+                  className="text-xs font-semibold text-white hover:text-[#76B900] flex items-center space-x-1 group cursor-pointer"
                 >
                   <span>Test in Sandbox</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
