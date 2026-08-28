@@ -109,7 +109,7 @@ export default function PredictView() {
         } else if (defectType === "Edge-Loc") {
           isDefect = dist > radius * 0.72 && dx > radius * 0.35 && Math.random() < 0.90;
         } else if (defectType === "Edge-Ring") {
-          isDefect = dist > radius * 0.80 && dist < radius && Math.random() < 0.90;
+          isDefect = dist > radius * 0.87;
         } else if (defectType === "Loc") {
           isDefect = dx > radius * 0.25 && dx < radius * 0.65 && dy > -radius * 0.45 && dy < 0 && Math.random() < 0.85;
         } else if (defectType === "Random") {
