@@ -74,23 +74,23 @@ export default function PredictView() {
     const radius = size / 2 - 8;
     const center = size / 2;
 
-    // 0 = background (black/transparent)
+    // 0 = background (outer void)
     ctx.fillStyle = "#090a0f";
     ctx.fillRect(0, 0, size, size);
 
-    // Draw wafer substrate circle
+    // 1. Draw solid wafer substrate of normal good dies (#252e3e)
     ctx.beginPath();
     ctx.arc(center, center, radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#161b22";
+    ctx.fillStyle = "#252e3e";
     ctx.fill();
-    ctx.strokeStyle = "rgba(118, 185, 0, 0.4)";
+    ctx.strokeStyle = "rgba(118, 185, 0, 0.45)";
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Draw dies grid (1 = good die in zinc, 2 = defect die in cyan/green)
+    // 2. Draw defective dies on top (#76B900)
+    ctx.fillStyle = "#76B900";
     const dieSize = 6;
-    const gap = 1;
-    const step = dieSize + gap;
+    const step = 6;
 
     for (let x = 8; x < size - 8; x += step) {
       for (let y = 8; y < size - 8; y += step) {
@@ -103,29 +103,26 @@ export default function PredictView() {
         let isDefect = false;
 
         if (defectType === "Center") {
-          isDefect = dist < 30 && Math.random() < 0.85;
+          isDefect = dist < radius * 0.32 && Math.random() < 0.85;
         } else if (defectType === "Donut") {
-          isDefect = dist > 32 && dist < 68 && Math.random() < 0.85;
+          isDefect = dist > radius * 0.35 && dist < radius * 0.70 && Math.random() < 0.85;
         } else if (defectType === "Edge-Loc") {
-          isDefect = dist > radius - 22 && dx > radius * 0.42 && Math.random() < 0.90;
+          isDefect = dist > radius * 0.72 && dx > radius * 0.35 && Math.random() < 0.90;
         } else if (defectType === "Edge-Ring") {
-          isDefect = dist > radius - 16 && dist < radius - 2 && Math.random() < 0.85;
+          isDefect = dist > radius * 0.80 && dist < radius && Math.random() < 0.90;
         } else if (defectType === "Loc") {
-          isDefect = dx > 20 && dx < 60 && dy > -35 && dy < 0 && Math.random() < 0.85;
+          isDefect = dx > radius * 0.25 && dx < radius * 0.65 && dy > -radius * 0.45 && dy < 0 && Math.random() < 0.85;
         } else if (defectType === "Random") {
-          isDefect = Math.random() < 0.46;
+          isDefect = Math.random() < 0.45;
         } else if (defectType === "Scratch") {
-          isDefect = Math.abs(dx - dy * 0.75) < 5 && Math.random() < 0.85;
+          isDefect = Math.abs(dx - dy * 0.7) < 3.5 && Math.random() < 0.85;
         } else if (defectType === "Near-full") {
-          isDefect = Math.random() < 0.88;
+          isDefect = Math.random() < 0.90;
         }
 
         if (isDefect) {
-          ctx.fillStyle = "#76B900"; // Defect die
-        } else {
-          ctx.fillStyle = "#272e39"; // Normal good die
+          ctx.fillRect(x, y, dieSize, dieSize);
         }
-        ctx.fillRect(x, y, dieSize, dieSize);
       }
     }
   }, []);
@@ -399,13 +396,13 @@ console.log("Defect Class:", result.predicted_class);`,
                 )}
 
                 <div className="flex items-center space-x-3 mt-3 text-[10px] font-mono text-zinc-400">
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2 h-2 rounded-full bg-[#272e39]" />
-                    <span>Good Die</span>
+                  <span className="flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-sm bg-[#252e3e] border border-zinc-500" />
+                    <span>Good Die (Pass)</span>
                   </span>
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2 h-2 rounded-full bg-[#76B900]" />
-                    <span>Defective Die</span>
+                  <span className="flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-sm bg-[#76B900] shadow-[0_0_6px_#76B900]" />
+                    <span>Defect Die (Fail)</span>
                   </span>
                 </div>
               </div>
