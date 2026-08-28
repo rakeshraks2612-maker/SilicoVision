@@ -12,7 +12,16 @@ from torchvision import transforms
 
 from src.data.wafer_dataset import WaferPreprocessConfig
 from src.models import build_resnet18
-from src.training.trainer import select_device
+
+
+def select_device() -> torch.device:
+    """Prefer CUDA or MPS when available, otherwise use CPU."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
+
 
 
 @dataclass(frozen=True)

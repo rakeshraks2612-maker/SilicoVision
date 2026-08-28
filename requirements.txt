@@ -11,3 +11,7 @@ pytest>=8.0
 matplotlib>=3.8
 seaborn>=0.13
 tensorboard>=2.16
+fastapi>=0.110.0
+uvicorn>=0.28.0
+python-multipart>=0.0.9
+
