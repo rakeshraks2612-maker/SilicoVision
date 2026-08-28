@@ -139,7 +139,7 @@ export default function DatasetView({ onNavigate }: DatasetViewProps) {
       geometry: "Distinct annular toroidal ring of failed dies surrounding a healthy center with healthy perimeter.",
       rootCause: "Thermal standing wave gradient across concentric heating lamp zones or drying wave vortex in photoresist spin-coating.",
       remedy: "Profile RTA pyrometer sensor calibration, calibrate multi-zone heating lamp bank power ratios, and adjust solvent vapor drying exhaust.",
-      physicsDesc: "Toroidal temperature non-uniformity during dopant activation causes localized incomplete lattice recrystallization and threshold voltage ($V_{th}$) mismatch.",
+      physicsDesc: "Toroidal temperature non-uniformity during dopant activation causes localized incomplete lattice recrystallization and threshold voltage (Vth) mismatch across concentric die rings.",
       typicalYieldImpact: "10% – 25% annular die loss",
     },
     {
@@ -149,7 +149,7 @@ export default function DatasetView({ onNavigate }: DatasetViewProps) {
       color: "#ef4444",
       severity: "Catastrophic",
       equipment: "CMP Polishing Tool / Main Cleanroom Power Grid & Gas Abatement",
-      geometry: "Massive failure covering $>80\%$ of all dies on the wafer surface with almost zero functional yield.",
+      geometry: "Massive failure covering >80% of all dies on the wafer surface with almost zero functional yield.",
       rootCause: "Catastrophic CMP pad delamination, runaway etch plasma arc, chemical dispense failure, or chamber vacuum leak.",
       remedy: "Execute immediate emergency tool shutdown, replace CMP polishing heads, purge toxic gas supply lines, and overhaul chamber seals.",
       physicsDesc: "Total layer breakdown, complete wafer delamination, or severe substrate warping rendering every integrated circuit completely inoperable.",
@@ -164,14 +164,22 @@ export default function DatasetView({ onNavigate }: DatasetViewProps) {
     { label: "Class Imbalance Ratio", value: "29.2 : 1", sub: "Edge-Loc vs Near-full" },
   ];
 
-  // Draw simulated wafer map inside the modal popup
+  // Draw simulated wafer map inside the modal popup with crisp high-DPI scaling
   useEffect(() => {
     if (!selectedDefect || !modalCanvasRef.current) return;
     const canvas = modalCanvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const size = canvas.width;
+    const displaySize = 220;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = displaySize * dpr;
+    canvas.height = displaySize * dpr;
+    canvas.style.width = `${displaySize}px`;
+    canvas.style.height = `${displaySize}px`;
+    ctx.scale(dpr, dpr);
+
+    const size = displaySize;
     const center = size / 2;
     const radius = size * 0.44;
 
@@ -560,7 +568,7 @@ export default function DatasetView({ onNavigate }: DatasetViewProps) {
             {/* Modal Actions */}
             <div className="pt-3 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs font-mono text-zinc-500">
-                Model Classifier: SilicoVision EfficientNet-B2 (NIM Microservice)
+                Model Classifier: SilicoVision EfficientNet-B2 (Vision Microservice)
               </span>
 
               <div className="flex items-center space-x-3">

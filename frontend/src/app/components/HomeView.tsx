@@ -32,7 +32,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
     {
       label: "Inference Latency",
       value: "4.2 ms",
-      sub: "Optimized on NVIDIA Tensor Cores",
+      sub: "Optimized on Tensor Core GPU",
       trend: "Real-time edge ready",
     },
     {
@@ -99,13 +99,13 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
   return (
     <div className="space-y-12 animate-page-fade">
-      {/* 1. Hero Section (NVIDIA Build Inspired with 3D Circuit Banner Artwork) */}
+      {/* 1. Hero Section (3D Circuit Banner Artwork) */}
       <div className="relative overflow-hidden rounded-2xl border border-white/[0.12] bg-black p-8 sm:p-12 shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
-        {/* Background 3D NVIDIA Ribbon Artwork */}
+        {/* Background 3D Ribbon Artwork */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/nvidia_hero.jpg"
-          alt="NVIDIA AI Semiconductor Architecture"
+          src="/silicovision_hero.jpg"
+          alt="Semiconductor AI Architecture"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-45 group-hover:scale-105 transition-transform duration-1000 pointer-events-none"
         />
 
@@ -117,7 +117,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         <div className="relative z-10 max-w-3xl space-y-6">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-black/80 backdrop-blur-md border border-[rgba(118,185,0,0.4)] text-[#76B900] shadow-[0_0_15px_rgba(118,185,0,0.25)]">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>NVIDIA NIM ARCHITECTURE FOR SEMICONDUCTOR FABRICATIONS</span>
+            <span>ADVANCED DEEP LEARNING ARCHITECTURE FOR SEMICONDUCTOR FABRICATIONS</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
@@ -149,7 +149,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               className="inline-flex items-center space-x-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-black/70 backdrop-blur-md border border-white/20 text-white hover:border-[rgba(118,185,0,0.6)] hover:bg-zinc-900/90 transition-all cursor-pointer"
             >
               <Cpu className="w-4 h-4 text-[#76B900]" />
-              <span>Browse NIM Models</span>
+              <span>Browse AI Models</span>
             </button>
 
             <button
@@ -187,13 +187,13 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         ))}
       </div>
 
-      {/* 3. Featured NIM Model Showcase */}
+      {/* 3. Featured AI Model Showcase */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-white flex items-center space-x-2">
               <Cpu className="w-5 h-5 text-[#76B900]" />
-              <span>Featured NIM Microservices</span>
+              <span>Featured Vision Microservices</span>
             </h2>
             <p className="text-xs text-zinc-400 mt-1">Pre-trained, quantized, and ready for fab production dispatch</p>
           </div>

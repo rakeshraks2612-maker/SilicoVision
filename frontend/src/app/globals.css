@@ -14,14 +14,14 @@
   }
 
   body {
-    background-color: var(--background);
+    background-color: #030406;
     color: var(--foreground);
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
   }
 }
 
-/* NVIDIA-style Animations */
+/* SilicoVision Modern Dashboard Animations */
 @keyframes borderGlow {
   0% {
     border-color: rgba(118, 185, 0, 0.25);

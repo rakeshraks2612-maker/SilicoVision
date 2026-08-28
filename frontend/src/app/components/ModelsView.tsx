@@ -31,7 +31,7 @@ export default function ModelsView({ onSelectModel }: ModelsViewProps) {
       architecture: "EfficientNet-B2 (Compound Scaled)",
       params: "7.7M",
       vram: "420 MB",
-      gpu: "1x NVIDIA T4 / RTX 4090 / A100",
+      gpu: "1x Tensor GPU / RTX 4090 / A100",
       latency: "4.2 ms",
       accuracy: "83.1%",
       macroAuc: "98.7%",
@@ -58,7 +58,7 @@ with torch.no_grad():
       architecture: "ResNet-18 (Residual CNN)",
       params: "11.2M",
       vram: "280 MB",
-      gpu: "NVIDIA Jetson / Edge TensorRT",
+      gpu: "Edge TensorRT / Embedded Core",
       latency: "1.8 ms",
       accuracy: "81.4%",
       macroAuc: "97.8%",
@@ -81,7 +81,7 @@ print("Model initialized for edge wafer inspection pipeline.")`,
       architecture: "EfficientNet-B0 + Dynamic Focal Head",
       params: "4.0M",
       vram: "310 MB",
-      gpu: "1x NVIDIA RTX / Tensor Core",
+      gpu: "1x Tensor Core Accelerator",
       latency: "2.9 ms",
       accuracy: "82.3%",
       macroAuc: "98.4%",
@@ -101,7 +101,7 @@ criterion = WeightedFocalLoss(gamma=2.0)`,
       architecture: "Vision Transformer (ViT-Small / Patch 16)",
       params: "22.1M",
       vram: "850 MB",
-      gpu: "1x NVIDIA A100 / H100",
+      gpu: "1x High-Memory GPU (A100/H100)",
       latency: "8.4 ms",
       accuracy: "84.9%",
       macroAuc: "99.1%",
@@ -127,7 +127,7 @@ criterion = WeightedFocalLoss(gamma=2.0)`,
         <div>
           <div className="inline-flex items-center space-x-1.5 text-xs font-mono text-[#76B900] uppercase tracking-wider mb-1">
             <Cpu className="w-3.5 h-3.5" />
-            <span>NIM Model Catalog</span>
+            <span>AI Model Catalog</span>
           </div>
           <h1 className="text-3xl font-extrabold text-white">
             Semiconductor Defect Microservices

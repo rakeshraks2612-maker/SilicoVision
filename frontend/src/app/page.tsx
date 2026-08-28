@@ -94,7 +94,7 @@ export default function App() {
     { title: "Defect Classes (8 Archetypes)", tab: "Dataset" as TabName, desc: "Center, Donut, Edge-Loc, Scratch, etc." },
     { title: "ROC-AUC & Confusion Matrix", tab: "Telemetry" as TabName, desc: "0.984 Macro ROC-AUC metrics" },
     { title: "REST API Endpoint POST /predict", tab: "ApiDocs" as TabName, desc: "Upload and classify wafer maps" },
-    { title: "Docker Deployment Command", tab: "ApiDocs" as TabName, desc: "Deploy via NVIDIA NIM container" },
+    { title: "Docker Deployment Command", tab: "ApiDocs" as TabName, desc: "Deploy via SilicoVision container" },
   ];
 
   const filteredSearch = searchItems.filter(
@@ -108,19 +108,19 @@ export default function App() {
       {/* 1. Dynamic Interactive Particle & Semiconductor Matrix Canvas */}
       {!disableAnim && <BackgroundCanvas theme={bgTheme} />}
 
-      {/* 2. Exact 1:1 build.nvidia.com Top Aurora Mask Layer */}
+      {/* 2. Top Ambient Aurora Glow Layer */}
       <div
         className="fixed inset-x-0 -z-1 opacity-18 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] top-0 h-[520px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)] [mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)]"
         aria-hidden="true"
       />
 
-      {/* 3. Exact 1:1 build.nvidia.com Bottom Ambient Glow Layer */}
+      {/* 3. Bottom Ambient Horizon Glow Layer */}
       <div
         className="fixed inset-x-0 -z-1 opacity-14 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] bottom-0 h-[340px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)] [mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)]"
         aria-hidden="true"
       />
 
-      {/* 4. NVIDIA Build-Inspired Sticky App-Bar Header */}
+      {/* 4. Sticky App-Bar Header */}
       <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/70 backdrop-blur-xl transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Brand Logo */}
@@ -134,7 +134,7 @@ export default function App() {
                   SilicoVision
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[rgba(118,185,0,0.15)] text-[#76B900] border border-[rgba(118,185,0,0.3)]">
-                  NIM Microservice
+                  Vision Microservice
                 </span>
               </div>
               <p className="text-[10px] text-zinc-400 font-mono tracking-tight hidden sm:block">
@@ -339,7 +339,7 @@ export default function App() {
         {activeTab === "ApiDocs" && <ApiDocsView />}
       </main>
 
-      {/* 6. Footer (NVIDIA Build Inspired) */}
+      {/* 6. Footer */}
       <footer className="border-t border-zinc-900 bg-black/80 backdrop-blur-md py-8 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 mt-auto z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">

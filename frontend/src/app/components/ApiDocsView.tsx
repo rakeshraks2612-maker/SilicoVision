@@ -89,7 +89,7 @@ export default function ApiDocsView() {
           <span>Developer API & Deployment</span>
         </div>
         <h1 className="text-3xl font-extrabold text-white">
-          SilicoVision NIM API Reference
+          SilicoVision API Reference
         </h1>
         <p className="text-sm text-zinc-400 mt-1">
           Integrate SilicoVision inference microservices into your manufacturing execution systems (MES) and fab yield pipelines.
@@ -98,23 +98,23 @@ export default function ApiDocsView() {
 
       {/* Deployment Quickstart (Docker & Python SDK) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Docker NIM Container */}
+        {/* Docker Container */}
         <div className="glass-card p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Server className="w-4 h-4 text-[#76B900]" />
-              <h3 className="text-sm font-bold text-white">Docker NIM Microservice</h3>
+              <h3 className="text-sm font-bold text-white">Docker Vision Microservice</h3>
             </div>
             <span className="text-[10px] font-mono text-zinc-400">GPU Accelerated</span>
           </div>
           <p className="text-xs text-zinc-400">
-            Spin up a self-contained container with NVIDIA GPU TensorRT acceleration:
+            Spin up a self-contained container with GPU TensorRT acceleration:
           </p>
           <div className="relative">
             <pre className="p-3 code-block text-[11px] text-zinc-300 overflow-x-auto">
-              <code>{`# Pull & Launch SilicoVision NIM Container
+              <code>{`# Pull & Launch SilicoVision Container
 docker run --gpus all -d \\
-  --name silicovision-nim \\
+  --name silicovision-api \\
   -p 8000:8000 \\
   -v $(pwd)/checkpoints:/app/checkpoints \\
   ghcr.io/rakeshraks2612-maker/silicovision:latest`}</code>
@@ -122,7 +122,7 @@ docker run --gpus all -d \\
             <button
               onClick={() =>
                 handleCopy(
-                  `docker run --gpus all -d --name silicovision-nim -p 8000:8000 -v $(pwd)/checkpoints:/app/checkpoints ghcr.io/rakeshraks2612-maker/silicovision:latest`,
+                  `docker run --gpus all -d --name silicovision-api -p 8000:8000 -v $(pwd)/checkpoints:/app/checkpoints ghcr.io/rakeshraks2612-maker/silicovision:latest`,
                   "docker"
                 )
               }
