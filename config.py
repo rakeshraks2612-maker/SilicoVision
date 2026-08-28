@@ -1,0 +1,17 @@
+"""Central project paths and default settings."""
+
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+DATASET_DIR = PROJECT_ROOT / "dataset"
+CHECKPOINT_DIR = PROJECT_ROOT / "checkpoints"
+OUTPUT_DIR = PROJECT_ROOT / "outputs"
+LOG_DIR = PROJECT_ROOT / "logs"
+
+DEFAULT_IMAGE_SIZE = 224
+DEFAULT_NUM_CLASSES = 8
+DEFAULT_BATCH_SIZE = 32
+DEFAULT_EPOCHS = 40
+DEFAULT_NUM_WORKERS = 0
+DEFAULT_VALIDATION_FRACTION = 0.1
+DEFAULT_TEST_FRACTION = 0.1
