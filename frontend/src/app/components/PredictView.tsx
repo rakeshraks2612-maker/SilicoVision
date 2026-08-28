@@ -113,7 +113,7 @@ export default function PredictView() {
         } else if (defectType === "Loc") {
           isDefect = dx > 20 && dx < 60 && dy > -35 && dy < 0 && Math.random() < 0.85;
         } else if (defectType === "Random") {
-          isDefect = dist > 15 && Math.random() < 0.09;
+          isDefect = Math.random() < 0.46;
         } else if (defectType === "Scratch") {
           isDefect = Math.abs(dx - dy * 0.75) < 5 && Math.random() < 0.85;
         } else if (defectType === "Near-full") {
