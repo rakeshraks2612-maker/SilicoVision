@@ -52,39 +52,48 @@ def preprocess_wafer_array(
     else:
         # 2. Handle RGB / RGBA / Grayscale rendered images
         if image.ndim == 3 and image.shape[2] in (3, 4):
-            b = image[:, :, 0].astype(np.float32)
-            g = image[:, :, 1].astype(np.float32)
-            r = image[:, :, 2].astype(np.float32)
-            gray = cv2.cvtColor(image[:, :, :3], cv2.COLOR_BGR2GRAY)
-            # Detect defect pixels by chromatic saturation (green, red, cyan, yellow)
-            color_defect = ((g - b) > 20) | ((r - b) > 25) | ((b - r) > 30)
-        elif image.ndim == 3 and image.shape[2] == 1:
-            gray = image[:, :, 0]
-            color_defect = np.zeros_like(gray, dtype=bool)
-        elif image.ndim == 2:
-            gray = image
-            color_defect = np.zeros_like(gray, dtype=bool)
+            b = image[:, :, 0].astype(int)
+            g = image[:, :, 1].astype(int)
+            r = image[:, :, 2].astype(int)
+            # Detect defect dies (Red, Green, Blue, Yellow, or high contrast anomalies)
+            is_red = (r > 130) & (g < 120) & (b < 120)
+            is_green = (g > 130) & (r < 120) & (b < 120)
+            is_blue = (b > 130) & (r < 120) & (g < 120)
+            is_yellow = (r > 130) & (g > 130) & (b < 100)
+            is_white = (r > 130) & (g > 130) & (b > 130)
+            is_dark_defect = (r < 40) & (g < 40) & (b < 40)
+            
+            is_defect = is_red | is_green | is_blue | is_yellow
+            all_dies = is_white | is_defect | (image[:, :, 0] > 20)
         else:
-            raise ValueError(f"Expected a 2-D or 3-D wafer image; got shape {image.shape}.")
+            gray = image if image.ndim == 2 else image[:, :, 0]
+            is_defect = gray > 180
+            all_dies = gray > 20
 
-        h, w = gray.shape
-
-        # Check if corners are light (white/light background inversion)
-        corners = [gray[0, 0], gray[0, -1], gray[-1, 0], gray[-1, -1]]
-        if np.mean(corners) > 150:
-            gray = 255 - gray
-
+        h, w = all_dies.shape[:2]
         mapped = np.zeros((h, w), dtype=np.uint8)
-        wafer_mask = gray > 15
 
-        if np.any(wafer_mask):
-            wafer_pixels = gray[wafer_mask]
-            median_val = np.median(wafer_pixels)
-            bright_defect = gray > (median_val + 35)
-            defect_mask = color_defect | bright_defect
+        # Use morphological closing on all dies to get the solid circular wafer domain
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (max(5, h // 40), max(5, w // 40)))
+        closed = cv2.morphologyEx(all_dies.astype(np.uint8), cv2.MORPH_CLOSE, kernel)
+        contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-            mapped[wafer_mask] = 127
-            mapped[wafer_mask & defect_mask] = 255
+        if contours:
+            c = max(contours, key=cv2.contourArea)
+            (cx, cy), radius = cv2.minEnclosingCircle(c)
+            # Inside wafer circular domain = 127
+            cv2.circle(mapped, (int(cx), int(cy)), int(radius * 0.97), 127, -1)
+
+            # Map defect dies
+            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(is_defect.astype(np.uint8))
+            for i in range(1, num_labels):
+                if stats[i, cv2.CC_STAT_AREA] >= 3:
+                    x, y, bw, bh = stats[i, cv2.CC_STAT_LEFT], stats[i, cv2.CC_STAT_TOP], stats[i, cv2.CC_STAT_WIDTH], stats[i, cv2.CC_STAT_HEIGHT]
+                    pad = max(1, min(bw, bh) // 4)
+                    mapped[max(0, y-pad):min(h, y+bh+pad), max(0, x-pad):min(w, x+bw+pad)] = 255
+        else:
+            mapped[all_dies > 0] = 127
+            mapped[is_defect] = 255
 
     mapped = cv2.resize(
         mapped,
