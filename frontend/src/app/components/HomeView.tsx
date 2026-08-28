@@ -99,36 +99,45 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
   return (
     <div className="space-y-12 animate-page-fade">
-      {/* 1. Hero Section (NVIDIA Build Inspired) */}
-      <div className="relative overflow-hidden rounded-2xl border border-[rgba(118,185,0,0.25)] bg-gradient-to-b from-[#090b0e] to-[#040405] p-8 sm:p-12 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 rounded-full bg-[#76B900]/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-12 w-80 h-80 rounded-full bg-[#00E5FF]/5 blur-3xl pointer-events-none" />
+      {/* 1. Hero Section (NVIDIA Build Inspired with 3D Circuit Banner Artwork) */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.12] bg-black p-8 sm:p-12 shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
+        {/* Background 3D NVIDIA Ribbon Artwork */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/nvidia_hero.jpg"
+          alt="NVIDIA AI Semiconductor Architecture"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-45 group-hover:scale-105 transition-transform duration-1000 pointer-events-none"
+        />
+
+        {/* Multi-gradient Vignette Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#76B900]/15 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-6">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[rgba(118,185,0,0.12)] border border-[rgba(118,185,0,0.3)] text-[#76B900]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-black/80 backdrop-blur-md border border-[rgba(118,185,0,0.4)] text-[#76B900] shadow-[0_0_15px_rgba(118,185,0,0.25)]">
             <Sparkles className="w-3.5 h-3.5" />
             <span>NVIDIA NIM ARCHITECTURE FOR SEMICONDUCTOR FABRICATIONS</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
             Deploy Enterprise-Grade{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-100 to-[#76B900]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#BFF230] via-white to-[#7CD7FE]">
               Wafer Defect AI
             </span>{" "}
             at Silicon Scale.
           </h1>
 
-          <p className="text-base sm:text-lg text-zinc-400 leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-2xl font-normal">
             SilicoVision delivers deep learning vision microservices for automated wafer map defect classification on the{" "}
-            <span className="text-white font-medium">WM-811K semiconductor benchmark</span>. Accelerate root-cause isolation and optimize fab yield in real-time.
+            <span className="text-white font-semibold">WM-811K benchmark</span>. Accelerate root-cause isolation and optimize fab yield in real-time.
           </p>
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <button
               onClick={() => onNavigate?.("Playground")}
-              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg font-semibold text-sm bg-[#76B900] text-black hover:bg-[#86d400] transition-all shadow-[0_0_25px_rgba(118,185,0,0.4)] hover:shadow-[0_0_35px_rgba(118,185,0,0.6)] cursor-pointer"
+              className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-[#76B900] text-black hover:bg-[#86d400] transition-all shadow-[0_0_30px_rgba(118,185,0,0.5)] hover:shadow-[0_0_40px_rgba(118,185,0,0.7)] cursor-pointer"
             >
               <Zap className="w-4 h-4 fill-current" />
               <span>Launch Interactive Playground</span>
@@ -137,7 +146,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
             <button
               onClick={() => onNavigate?.("Models")}
-              className="inline-flex items-center space-x-2 px-5 py-3 rounded-lg font-semibold text-sm bg-zinc-900 border border-zinc-700 text-white hover:border-[rgba(118,185,0,0.4)] hover:bg-zinc-800 transition-all cursor-pointer"
+              className="inline-flex items-center space-x-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-black/70 backdrop-blur-md border border-white/20 text-white hover:border-[rgba(118,185,0,0.6)] hover:bg-zinc-900/90 transition-all cursor-pointer"
             >
               <Cpu className="w-4 h-4 text-[#76B900]" />
               <span>Browse NIM Models</span>
@@ -145,7 +154,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
             <button
               onClick={() => onNavigate?.("ApiDocs")}
-              className="inline-flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold text-sm text-zinc-400 hover:text-white transition-all cursor-pointer"
+              className="inline-flex items-center space-x-2 px-4 py-3.5 rounded-xl font-semibold text-sm text-zinc-400 hover:text-white transition-all cursor-pointer"
             >
               <Terminal className="w-4 h-4" />
               <span>API Reference</span>
