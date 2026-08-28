@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import BackgroundCanvas from "./components/BackgroundCanvas";
+import BackgroundCanvas, { BgTheme } from "./components/BackgroundCanvas";
 import HomeView from "./components/HomeView";
 import ModelsView from "./components/ModelsView";
 import PredictView from "./components/PredictView";
@@ -19,6 +19,7 @@ import {
   Terminal,
   ExternalLink,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
@@ -32,6 +33,7 @@ export type TabName =
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabName>("Explore");
+  const [bgTheme, setBgTheme] = useState<BgTheme>("quantum");
   const [disableAnim, setDisableAnim] = useState(false);
   const [apiOnline, setApiOnline] = useState<boolean | null>(null);
   const [latency, setLatency] = useState<number>(4.2);
@@ -104,7 +106,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-[#ececec] bg-transparent">
       {/* 1. Dynamic Interactive Particle & Semiconductor Matrix Canvas */}
-      {!disableAnim && <BackgroundCanvas />}
+      {!disableAnim && <BackgroundCanvas theme={bgTheme} />}
 
       {/* 2. Exact 1:1 build.nvidia.com Top Aurora Mask Layer */}
       <div
@@ -144,22 +146,22 @@ export default function App() {
           {/* Center Navigation Tabs */}
           <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
             {tabs.map((tab) => {
-              const isActive = activeTab === tab.name;
               const Icon = tab.icon;
+              const isActive = activeTab === tab.name;
               return (
                 <button
                   key={tab.name}
                   onClick={() => setActiveTab(tab.name)}
-                  className={`relative px-3 py-2 text-xs font-semibold rounded-md transition-all flex items-center space-x-1.5 ${
+                  className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all relative cursor-pointer ${
                     isActive
-                      ? "text-white font-bold bg-[rgba(118,185,0,0.12)]"
-                      : "text-zinc-400 hover:text-zinc-200 hover:bg-white/5"
+                      ? "text-white bg-zinc-900 border border-[rgba(118,185,0,0.35)] shadow-[0_0_15px_rgba(118,185,0,0.15)]"
+                      : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 border border-transparent"
                   }`}
                 >
                   <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#76B900]" : "text-zinc-400"}`} />
                   <span>{tab.label}</span>
                   {isActive && (
-                    <div className="absolute bottom-0 inset-x-2 h-0.5 bg-[#76B900] shadow-[0_0_8px_#76B900]" />
+                    <span className="absolute bottom-0 inset-x-3 h-[2px] bg-gradient-to-r from-transparent via-[#76B900] to-transparent" />
                   )}
                 </button>
               );
@@ -167,11 +169,48 @@ export default function App() {
           </nav>
 
           {/* Right Action Items */}
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex items-center space-x-2.5 shrink-0">
+            {/* Interactive Theme Switcher */}
+            <div className="flex items-center bg-black/80 border border-zinc-800 rounded-lg p-0.5 text-[11px] font-mono">
+              <button
+                onClick={() => setBgTheme("quantum")}
+                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                  bgTheme === "quantum"
+                    ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+                title="3D Quantum Silicon Mesh"
+              >
+                Quantum
+              </button>
+              <button
+                onClick={() => setBgTheme("galaxy")}
+                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                  bgTheme === "galaxy"
+                    ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+                title="3D Spiral Galaxy"
+              >
+                Galaxy
+              </button>
+              <button
+                onClick={() => setBgTheme("fluid")}
+                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                  bgTheme === "fluid"
+                    ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
+                title="Bioluminescent Fluid Flow"
+              >
+                Fluid
+              </button>
+            </div>
+
             {/* Quick Search Button */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs bg-zinc-900/90 border border-zinc-800 text-zinc-400 hover:border-[rgba(118,185,0,0.3)] hover:text-zinc-200 transition-all"
+              className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs bg-zinc-900/90 border border-zinc-800 text-zinc-400 hover:border-[rgba(118,185,0,0.3)] hover:text-zinc-200 transition-all cursor-pointer"
             >
               <Search className="w-3.5 h-3.5" />
               <span>Search</span>
