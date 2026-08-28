@@ -127,7 +127,20 @@ class WaferMapDataset(Dataset[tuple[torch.Tensor, torch.Tensor]]):
 
 def load_labeled_wafers(dataset_path: str | Path) -> pd.DataFrame:
     """Load only the eight labelled failure-pattern classes from WM-811K."""
-    frame = pd.read_pickle(dataset_path).copy()
+    import sys, pickle
+    try:
+        import pandas.core.indexes
+        sys.modules.setdefault("pandas.indexes", pandas.core.indexes)
+        sys.modules.setdefault("pandas.indexes.base", pandas.core.indexes.base)
+    except Exception:
+        pass
+
+    try:
+        frame = pd.read_pickle(dataset_path).copy()
+    except Exception:
+        with open(dataset_path, "rb") as f:
+            frame = pickle.load(f, encoding="latin1").copy()
+
     required = {"waferMap", "failureType"}
     missing = required.difference(frame.columns)
     if missing:

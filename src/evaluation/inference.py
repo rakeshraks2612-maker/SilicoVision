@@ -38,7 +38,7 @@ class Prediction:
 def preprocess_wafer_array(
     image: np.ndarray, config: WaferPreprocessConfig | None = None
 ) -> torch.Tensor:
-    """Resize and normalize a raw map or image exactly as training does."""
+    """Resize and normalize any wafer image or array into standard 3-state tensor representation."""
     config = config or WaferPreprocessConfig()
     image = np.asarray(image)
     if image.size == 0:
@@ -50,32 +50,41 @@ def preprocess_wafer_array(
             np.clip(image, 0, 2).astype(np.uint8)
         ]
     else:
-        # 2. Handle RGB/RGBA/Grayscale rendered images
+        # 2. Handle RGB / RGBA / Grayscale rendered images
         if image.ndim == 3 and image.shape[2] in (3, 4):
             b = image[:, :, 0].astype(np.float32)
             g = image[:, :, 1].astype(np.float32)
             r = image[:, :, 2].astype(np.float32)
             gray = cv2.cvtColor(image[:, :, :3], cv2.COLOR_BGR2GRAY)
-            # Detect defect pixels by either brightness or colored saturation
-            defect_mask = (gray > 160) | ((g - b) > 25) | ((r - b) > 35)
+            # Detect defect pixels by chromatic saturation (green, red, cyan, yellow)
+            color_defect = ((g - b) > 20) | ((r - b) > 25) | ((b - r) > 30)
         elif image.ndim == 3 and image.shape[2] == 1:
             gray = image[:, :, 0]
-            defect_mask = gray > 160
+            color_defect = np.zeros_like(gray, dtype=bool)
         elif image.ndim == 2:
             gray = image
-            defect_mask = gray > 160
+            color_defect = np.zeros_like(gray, dtype=bool)
         else:
             raise ValueError(f"Expected a 2-D or 3-D wafer image; got shape {image.shape}.")
 
         h, w = gray.shape
+
+        # Check if corners are light (white/light background inversion)
+        corners = [gray[0, 0], gray[0, -1], gray[-1, 0], gray[-1, -1]]
+        if np.mean(corners) > 150:
+            gray = 255 - gray
+
         mapped = np.zeros((h, w), dtype=np.uint8)
+        wafer_mask = gray > 15
 
-        # Wafer die body mask (non-black pixels)
-        wafer_mask = gray > 12
+        if np.any(wafer_mask):
+            wafer_pixels = gray[wafer_mask]
+            median_val = np.median(wafer_pixels)
+            bright_defect = gray > (median_val + 35)
+            defect_mask = color_defect | bright_defect
 
-        # Assign discrete baseline 127 to normal dies, and 255 to defects
-        mapped[wafer_mask] = 127
-        mapped[wafer_mask & defect_mask] = 255
+            mapped[wafer_mask] = 127
+            mapped[wafer_mask & defect_mask] = 255
 
     mapped = cv2.resize(
         mapped,
@@ -85,6 +94,7 @@ def preprocess_wafer_array(
     image_rgb = cv2.cvtColor(mapped, cv2.COLOR_GRAY2RGB).astype(np.float32) / 255.0
     tensor = torch.from_numpy(image_rgb).permute(2, 0, 1)
     return transforms.Normalize(mean=config.mean, std=config.std)(tensor).unsqueeze(0)
+
 
 
 
