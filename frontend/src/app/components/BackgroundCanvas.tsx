@@ -69,10 +69,10 @@ export default function BackgroundCanvas() {
 
     // Ribbon wave configurations (NVIDIA Keynote / Build signature style)
     const ribbons = [
-      { yRatio: 0.28, speed: 0.0008, amp: 75, freq: 0.0018, color1: "rgba(191, 242, 48, 0.16)", color2: "rgba(124, 215, 254, 0.12)", width: 3 },
-      { yRatio: 0.35, speed: 0.0012, amp: 90, freq: 0.0014, color1: "rgba(118, 185, 0, 0.14)", color2: "rgba(0, 229, 255, 0.10)", width: 2 },
-      { yRatio: 0.65, speed: 0.0009, amp: 110, freq: 0.0012, color1: "rgba(124, 215, 254, 0.10)", color2: "rgba(191, 242, 48, 0.08)", width: 2.5 },
-      { yRatio: 0.72, speed: 0.0015, amp: 80, freq: 0.0020, color1: "rgba(118, 185, 0, 0.08)", color2: "rgba(20, 100, 220, 0.06)", width: 1.5 },
+      { yRatio: 0.22, speed: 0.0012, amp: 85, freq: 0.0016, color1: "rgba(191, 242, 48, 0.45)", color2: "rgba(124, 215, 254, 0.40)", width: 3.5 },
+      { yRatio: 0.32, speed: 0.0018, amp: 110, freq: 0.0012, color1: "rgba(118, 185, 0, 0.40)", color2: "rgba(0, 229, 255, 0.35)", width: 3.0 },
+      { yRatio: 0.62, speed: 0.0014, amp: 120, freq: 0.0014, color1: "rgba(124, 215, 254, 0.35)", color2: "rgba(191, 242, 48, 0.30)", width: 3.0 },
+      { yRatio: 0.75, speed: 0.0020, amp: 95, freq: 0.0018, color1: "rgba(118, 185, 0, 0.30)", color2: "rgba(0, 229, 255, 0.25)", width: 2.5 },
     ];
 
     let animationId: number;
@@ -82,23 +82,24 @@ export default function BackgroundCanvas() {
       time += 1;
 
       // Smooth mouse lerp
-      mouse.x += (mouse.targetX - mouse.x) * 0.05;
-      mouse.y += (mouse.targetY - mouse.y) * 0.05;
+      mouse.x += (mouse.targetX - mouse.x) * 0.06;
+      mouse.y += (mouse.targetY - mouse.y) * 0.06;
 
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Deep Obsidian Base
-      ctx.fillStyle = "#030406";
+      // 1. Draw solid dark base
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "#040508";
       ctx.fillRect(0, 0, width, height);
 
-      // 2. Global Additive Screen Blending for Volumetric Glow
+      // 2. Switch to Screen Additive blending for vivid neon glow
       ctx.globalCompositeOperation = "screen";
 
       // 3. Mouse Interactive Radial Spotlight
-      const mouseGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 550);
-      mouseGrad.addColorStop(0, "rgba(191, 242, 48, 0.14)");
-      mouseGrad.addColorStop(0.35, "rgba(124, 215, 254, 0.06)");
-      mouseGrad.addColorStop(0.7, "rgba(20, 40, 90, 0.03)");
+      const mouseGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 600);
+      mouseGrad.addColorStop(0, "rgba(191, 242, 48, 0.22)");
+      mouseGrad.addColorStop(0.35, "rgba(124, 215, 254, 0.12)");
+      mouseGrad.addColorStop(0.7, "rgba(20, 60, 140, 0.06)");
       mouseGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = mouseGrad;
       ctx.fillRect(0, 0, width, height);
@@ -113,19 +114,18 @@ export default function BackgroundCanvas() {
         ribbonGrad.addColorStop(0.5, r.color2);
         ribbonGrad.addColorStop(1, r.color1);
 
+        // A. Draw wide glowing aura
+        ctx.lineWidth = r.width * 8;
         ctx.strokeStyle = ribbonGrad;
-        ctx.lineWidth = r.width;
         ctx.beginPath();
 
         const step = 8;
         for (let x = 0; x <= width + step; x += step) {
-          // Dual-frequency harmonic sine wave
           const wave1 = Math.sin(x * r.freq + time * r.speed * 12) * r.amp;
           const wave2 = Math.cos(x * (r.freq * 0.5) - time * r.speed * 8) * (r.amp * 0.45);
 
-          // Magnetic mouse curvature deflection
           const distToMouse = Math.hypot(x - mouse.x, baseY - mouse.y);
-          const mouseDeflect = Math.exp(-distToMouse / 220) * (mouse.y - baseY) * 0.35;
+          const mouseDeflect = Math.exp(-distToMouse / 240) * (mouse.y - baseY) * 0.45;
 
           const y = baseY + wave1 + wave2 + mouseDeflect;
 
@@ -134,33 +134,31 @@ export default function BackgroundCanvas() {
         }
         ctx.stroke();
 
-        // Draw luminous wave glow envelope
-        ctx.lineWidth = r.width * 4;
-        ctx.strokeStyle = r.color1;
+        // B. Draw crisp high-intensity core ribbon
+        ctx.lineWidth = r.width;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
         ctx.stroke();
       }
 
       // 5. Draw Precision Semiconductor Matrix Grid & Crosshairs
       const gridSize = 48;
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 0.6;
 
       for (let x = 0; x < width; x += gridSize) {
         for (let y = 0; y < height; y += gridSize) {
           const distToMouse = Math.hypot(x - mouse.x, y - mouse.y);
-          const mouseProximity = Math.max(0, 1 - distToMouse / 320);
+          const mouseProximity = Math.max(0, 1 - distToMouse / 350);
 
-          if (mouseProximity > 0.05) {
-            const crossAlpha = mouseProximity * 0.35;
-            ctx.strokeStyle = `rgba(191, 242, 48, ${crossAlpha})`;
+          const crossAlpha = 0.04 + mouseProximity * 0.45;
+          ctx.strokeStyle = `rgba(191, 242, 48, ${crossAlpha})`;
 
-            const crossLen = 3.5;
-            ctx.beginPath();
-            ctx.moveTo(x - crossLen, y);
-            ctx.lineTo(x + crossLen, y);
-            ctx.moveTo(x, y - crossLen);
-            ctx.lineTo(x, y + crossLen);
-            ctx.stroke();
-          }
+          const crossLen = 4;
+          ctx.beginPath();
+          ctx.moveTo(x - crossLen, y);
+          ctx.lineTo(x + crossLen, y);
+          ctx.moveTo(x, y - crossLen);
+          ctx.lineTo(x, y + crossLen);
+          ctx.stroke();
         }
       }
 
@@ -175,8 +173,8 @@ export default function BackgroundCanvas() {
         if (s.y < 0) s.y = height;
         if (s.y > height) s.y = 0;
 
-        const pulse = Math.sin(time * 0.04 + s.phase) * 0.4 + 0.6;
-        ctx.fillStyle = s.color + (0.35 * pulse) + ")";
+        const pulse = Math.sin(time * 0.05 + s.phase) * 0.4 + 0.6;
+        ctx.fillStyle = s.color + (0.6 * pulse) + ")";
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.size * pulse, 0, Math.PI * 2);
         ctx.fill();
@@ -200,7 +198,7 @@ export default function BackgroundCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full -z-50 pointer-events-none transition-opacity duration-700"
+      className="fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700"
     />
   );
 }

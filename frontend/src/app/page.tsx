@@ -102,7 +102,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-[#ececec] bg-[#030406]">
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden font-sans text-[#ececec] bg-transparent">
       {/* 1. Dynamic Interactive Particle & Semiconductor Matrix Canvas */}
       {!disableAnim && <BackgroundCanvas />}
 
