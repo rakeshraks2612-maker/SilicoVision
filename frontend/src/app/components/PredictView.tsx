@@ -103,21 +103,21 @@ export default function PredictView() {
         let isDefect = false;
 
         if (defectType === "Center") {
-          isDefect = dist < 32 && Math.random() < 0.75;
+          isDefect = dist < 30 && Math.random() < 0.85;
         } else if (defectType === "Donut") {
-          isDefect = dist > 35 && dist < 65 && Math.random() < 0.7;
+          isDefect = dist > 32 && dist < 68 && Math.random() < 0.85;
         } else if (defectType === "Edge-Loc") {
-          isDefect = dist > radius - 30 && dx > 20 && dy < 30 && Math.random() < 0.8;
+          isDefect = dist > radius - 22 && dx > radius * 0.42 && Math.random() < 0.90;
         } else if (defectType === "Edge-Ring") {
-          isDefect = dist > radius - 20 && Math.random() < 0.65;
+          isDefect = dist > radius - 16 && dist < radius - 2 && Math.random() < 0.85;
         } else if (defectType === "Loc") {
-          isDefect = dx > 20 && dx < 60 && dy > -40 && dy < 0 && Math.random() < 0.75;
+          isDefect = dx > 20 && dx < 60 && dy > -35 && dy < 0 && Math.random() < 0.85;
         } else if (defectType === "Random") {
-          isDefect = Math.random() < 0.08;
+          isDefect = dist > 15 && Math.random() < 0.09;
         } else if (defectType === "Scratch") {
-          isDefect = Math.abs(dx - dy * 0.8) < 8 && Math.random() < 0.8;
+          isDefect = Math.abs(dx - dy * 0.75) < 5 && Math.random() < 0.85;
         } else if (defectType === "Near-full") {
-          isDefect = Math.random() < 0.75;
+          isDefect = Math.random() < 0.88;
         }
 
         if (isDefect) {

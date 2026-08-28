@@ -38,28 +38,54 @@ class Prediction:
 def preprocess_wafer_array(
     image: np.ndarray, config: WaferPreprocessConfig | None = None
 ) -> torch.Tensor:
-    """Resize and normalize a raw map or grayscale image exactly as training does."""
+    """Resize and normalize a raw map or image exactly as training does."""
     config = config or WaferPreprocessConfig()
-    if image.ndim == 3 and image.shape[2] == 4:
-        image = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
-    elif image.ndim == 3 and image.shape[2] == 3:
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    elif image.ndim == 3 and image.shape[2] == 1:
-        image = image[:, :, 0]
-    if image.ndim != 2:
-        raise ValueError(f"Expected a two-dimensional wafer image; got shape {image.shape}.")
     image = np.asarray(image)
     if image.size == 0:
         raise ValueError("Input wafer image is empty.")
-    # Raw WM-811K maps use 0/1/2; rendered images conventionally use 0/127/255.
-    if np.nanmax(image) <= 2:
-        image = np.array([0, 127, 255], dtype=np.uint8)[np.clip(image, 0, 2).astype(np.uint8)]
+
+    # 1. Handle 2-D raw integer maps (0=background, 1=pass die, 2=defect die)
+    if image.ndim == 2 and np.nanmax(image) <= 2:
+        mapped = np.array([0, 127, 255], dtype=np.uint8)[
+            np.clip(image, 0, 2).astype(np.uint8)
+        ]
     else:
-        image = np.clip(image, 0, 255).astype(np.uint8)
-    image = cv2.resize(image, (config.image_size, config.image_size), interpolation=cv2.INTER_NEAREST)
-    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB).astype(np.float32) / 255.0
-    tensor = torch.from_numpy(image).permute(2, 0, 1)
+        # 2. Handle RGB/RGBA/Grayscale rendered images
+        if image.ndim == 3 and image.shape[2] in (3, 4):
+            b = image[:, :, 0].astype(np.float32)
+            g = image[:, :, 1].astype(np.float32)
+            r = image[:, :, 2].astype(np.float32)
+            gray = cv2.cvtColor(image[:, :, :3], cv2.COLOR_BGR2GRAY)
+            # Detect defect pixels by either brightness or colored saturation
+            defect_mask = (gray > 160) | ((g - b) > 25) | ((r - b) > 35)
+        elif image.ndim == 3 and image.shape[2] == 1:
+            gray = image[:, :, 0]
+            defect_mask = gray > 160
+        elif image.ndim == 2:
+            gray = image
+            defect_mask = gray > 160
+        else:
+            raise ValueError(f"Expected a 2-D or 3-D wafer image; got shape {image.shape}.")
+
+        h, w = gray.shape
+        mapped = np.zeros((h, w), dtype=np.uint8)
+
+        # Wafer die body mask (non-black pixels)
+        wafer_mask = gray > 12
+
+        # Assign discrete baseline 127 to normal dies, and 255 to defects
+        mapped[wafer_mask] = 127
+        mapped[wafer_mask & defect_mask] = 255
+
+    mapped = cv2.resize(
+        mapped,
+        (config.image_size, config.image_size),
+        interpolation=cv2.INTER_NEAREST,
+    )
+    image_rgb = cv2.cvtColor(mapped, cv2.COLOR_GRAY2RGB).astype(np.float32) / 255.0
+    tensor = torch.from_numpy(image_rgb).permute(2, 0, 1)
     return transforms.Normalize(mean=config.mean, std=config.std)(tensor).unsqueeze(0)
+
 
 
 def load_wafer_image(path: str | Path) -> np.ndarray:
