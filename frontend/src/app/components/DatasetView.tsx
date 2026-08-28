@@ -1,144 +1,212 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React from "react";
+import {
+  Boxes,
+  Database,
+  Layers,
+  PieChart as PieIcon,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 
 export default function DatasetView() {
-  const [showDetails, setShowDetails] = useState(false);
-
-  const stats = [
-    { label: "Total Wafers", value: "811,110", desc: "Total wafers in the dataset (labeled + unlabeled)." },
-    { label: "Labeled Wafers", value: "172,950", desc: "Wafers with verified defect/normal labels." },
-    { label: "Defect Classes", value: "8 Types", desc: "Distinct defect signature classes." },
-    { label: "Normal Wafers", value: "147,435", desc: "Wafers with no spatial defect patterns." },
+  const classDistData = [
+    { name: "Edge-Loc", count: 2772, pct: "35.1%", color: "#76B900" },
+    { name: "Loc", count: 1973, pct: "25.0%", color: "#00E5FF" },
+    { name: "Edge-Ring", count: 1126, pct: "14.3%", color: "#a855f7" },
+    { name: "Center", count: 832, pct: "10.5%", color: "#3b82f6" },
+    { name: "Scratch", count: 693, pct: "8.8%", color: "#eab308" },
+    { name: "Random", count: 257, pct: "3.3%", color: "#f97316" },
+    { name: "Donut", count: 146, pct: "1.9%", color: "#ec4899" },
+    { name: "Near-full", count: 95, pct: "1.2%", color: "#ef4444" },
   ];
 
-  const classesInfo = [
+  const datasetStats = [
+    { label: "Total Wafers in WM-811K", value: "811,457", sub: "Collected from 46,393 lots" },
+    { label: "Labeled Defect Wafers", value: "172,950", sub: "Domain-annotated failure maps" },
+    { label: "Evaluation Test Split", value: "7,894", sub: "Strict held-out validation set" },
+    { label: "Class Imbalance Ratio", value: "29.2 : 1", sub: "Edge-Loc vs Near-full" },
+  ];
+
+  const defectArchetypes = [
     {
       name: "Center",
-      emoji: "🎯",
-      pattern: "⬤ Clustered in middle",
-      desc: "Defects form a concentrated cluster in the center area of the wafer. Often caused by spinner or chemical delivery issues.",
+      rootCause: "Plasma etch uniformity, gas distribution unevenness in CVD chamber.",
+      remedy: "Calibrate showerhead gas injector flow rate and wafer pedestal heating.",
     },
     {
       name: "Donut",
-      emoji: "🍩",
-      pattern: "◯ Concentric ring",
-      desc: "Defects form a circular band or ring shape away from the edges, resembling a torus. Typically caused by gas flow or heating loops.",
+      rootCause: "Thermal gradient during rapid thermal annealing (RTA) or spin-coating puddle.",
+      remedy: "Inspect lamp bank heating profile and photoresist dispense nozzles.",
     },
     {
       name: "Edge-Loc",
-      emoji: "🌅",
-      pattern: "◑ Clustered at edge",
-      desc: "Defects form a cluster located along the outer periphery of the wafer. Usually associated with handling issues or edge deposition.",
+      rootCause: "Edge clamp finger friction, robotic end-effector misplacement.",
+      remedy: "Re-align robotic arm blade and inspect wafer bevel gripping pressure.",
     },
     {
       name: "Edge-Ring",
-      emoji: "⭕",
-      pattern: "⭕ Complete outer ring",
-      desc: "Defects cover the entire outer rim or circumference of the wafer. Often related to etching chamber boundary effects.",
+      rootCause: "Edge bead removal (EBR) solvent overshoot or peripheral temperature drop.",
+      remedy: "Adjust EBR nozzle distance and edge ring heating jacket.",
     },
     {
       name: "Loc",
-      emoji: "📍",
-      pattern: "⚬ Localized cluster",
-      desc: "A dense cluster of defects located anywhere on the wafer map, excluding the edge and center. Points to local contamination.",
+      rootCause: "Localized particulate contamination from chamber wall flaking.",
+      remedy: "Trigger vacuum chamber wet clean and replace particulate exhaust trap.",
     },
     {
       name: "Random",
-      emoji: "🎲",
-      pattern: "░ Widespread noise",
-      desc: "Individual defect pixels scattered across the wafer without a clear spatial structure. Associated with random particulate noise.",
+      rootCause: "Airborne airborne particle deposition or raw silicon ingot crystal defects.",
+      remedy: "Verify cleanroom ISO Class 1 air filtration and incoming boule purity.",
     },
     {
       name: "Scratch",
-      emoji: "➖",
-      pattern: "✏️ Linear/Curved lines",
-      desc: "Defects align in thin linear or curved scratches across the wafer. Caused by mechanical handling arm scratches or friction.",
+      rootCause: "Mechanical tweezers contact or surface dragging during wafer transfer.",
+      remedy: "Replace wafer carrier cassettes and re-zero robotic transfer stages.",
     },
     {
       name: "Near-full",
-      emoji: "🚨",
-      pattern: "██ Almost entire wafer",
-      desc: "Wafer shows high defect densities spread over almost the entire surface area. Indicates systemic process failure.",
+      rootCause: "Catastrophic chemical mechanical planarization (CMP) pad failure or power surge.",
+      remedy: "Immediate tool interlock shutdown and polish head overhaul.",
     },
   ];
 
   return (
-    <div className="space-y-8 animate-page-fade">
+    <div className="space-y-10 animate-page-fade">
+      {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-          📦 WM-811K Dataset Overview
+        <div className="inline-flex items-center space-x-1.5 text-xs font-mono text-[#76B900] uppercase tracking-wider mb-1">
+          <Boxes className="w-3.5 h-3.5" />
+          <span>Semiconductor Benchmark Data</span>
+        </div>
+        <h1 className="text-3xl font-extrabold text-white">
+          WM-811K (LSWMD) Dataset Hub
         </h1>
-        <p className="mt-3 text-lg text-zinc-400 max-w-4xl">
-          The <strong className="text-white">WM-811K (LSWMD)</strong> dataset is an industry-standard benchmark dataset for wafer map defect analysis. It consists of 811,110 wafer maps collected from 46,393 lots in real-world fabrication plants. Out of these, 172,950 wafer maps are labeled with specific failure types.
+        <p className="text-sm text-zinc-400 mt-1">
+          The worldwide standard benchmark dataset for silicon wafer defect pattern recognition in semiconductor manufacturing.
         </p>
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4">📊 Dataset Distribution Statistics</h2>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="glass-card p-6">
-              <p className="text-sm font-medium text-zinc-400 truncate">{stat.label}</p>
-              <p className="mt-2 text-3xl font-extrabold text-primary">{stat.value}</p>
-              <p className="mt-2 text-xs text-zinc-500">{stat.desc}</p>
+      {/* Stats Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {datasetStats.map((stat, idx) => (
+          <div key={idx} className="glass-card p-5 space-y-1">
+            <span className="text-xs font-mono text-zinc-400">{stat.label}</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-white">{stat.value}</p>
+            <p className="text-[11px] text-zinc-500">{stat.sub}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Class Distribution Chart & Encoding Standard */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Class Distribution Chart (7 cols) */}
+        <div className="lg:col-span-7 glass-card p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-bold text-white">Test Split Class Distribution</h3>
+              <p className="text-xs text-zinc-400">Extreme class imbalance across the 8 defect patterns</p>
+            </div>
+            <span className="text-xs font-mono text-[#00E5FF]">7,894 Wafers</span>
+          </div>
+
+          <div className="h-64 w-full pt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={classDistData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                <XAxis dataKey="name" stroke="#6b7280" tick={{ fill: "#9ca3af", fontSize: 10 }} />
+                <YAxis stroke="#6b7280" tick={{ fill: "#9ca3af", fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#0d0f14",
+                    borderColor: "rgba(118,185,0,0.3)",
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                  }}
+                />
+                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                  {classDistData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* 3-State Discrete Encoding Standard (5 cols) */}
+        <div className="lg:col-span-5 glass-card p-6 space-y-4">
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-white">Discrete Wafer Map Encoding</h3>
+            <p className="text-xs text-zinc-400">3-State Categorical Tensor Representation</p>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <div className="p-3 rounded-lg bg-black/40 border border-zinc-800 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <span className="w-3 h-3 rounded-full bg-black border border-zinc-700" />
+                <div>
+                  <p className="text-xs font-bold text-white">Value 0 — Background</p>
+                  <p className="text-[10px] text-zinc-500">Outer void / beyond wafer perimeter</p>
+                </div>
+              </div>
+              <span className="font-mono text-xs text-zinc-400">Pixel = 0</span>
+            </div>
+
+            <div className="p-3 rounded-lg bg-black/40 border border-zinc-800 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <span className="w-3 h-3 rounded-full bg-[#272e39]" />
+                <div>
+                  <p className="text-xs font-bold text-white">Value 1 — Good Die (Pass)</p>
+                  <p className="text-[10px] text-zinc-500">Functional integrated circuit die</p>
+                </div>
+              </div>
+              <span className="font-mono text-xs text-zinc-400">Pixel = 127</span>
+            </div>
+
+            <div className="p-3 rounded-lg bg-black/40 border border-[rgba(118,185,0,0.3)] flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <span className="w-3 h-3 rounded-full bg-[#76B900] shadow-[0_0_8px_#76B900]" />
+                <div>
+                  <p className="text-xs font-bold text-[#76B900]">Value 2 — Defective Die (Fail)</p>
+                  <p className="text-[10px] text-zinc-400">Electrical test failure die</p>
+                </div>
+              </div>
+              <span className="font-mono text-xs text-[#76B900]">Pixel = 255</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Defect Root Causes & Corrective Actions Grid */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold text-white">Defect Archetypes & Fab Root-Cause Library</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {defectArchetypes.map((defect, idx) => (
+            <div key={idx} className="glass-card p-4 space-y-2.5">
+              <span className="font-mono text-xs font-bold text-[#76B900] bg-[rgba(118,185,0,0.1)] px-2 py-0.5 rounded border border-[rgba(118,185,0,0.2)]">
+                {defect.name}
+              </span>
+              <div>
+                <span className="text-[10px] font-mono uppercase text-zinc-500 block">Root Cause</span>
+                <p className="text-xs text-zinc-300 leading-snug">{defect.rootCause}</p>
+              </div>
+              <div className="pt-2 border-t border-zinc-800">
+                <span className="text-[10px] font-mono uppercase text-[#00E5FF] block">Fab Remedy</span>
+                <p className="text-[11px] text-zinc-400 leading-snug">{defect.remedy}</p>
+              </div>
             </div>
           ))}
         </div>
-      </div>
-
-      <div>
-        <h2 className="text-xl font-bold text-white mb-2">🧩 The Eight Wafer Defect Classes</h2>
-        <p className="text-zinc-400 text-sm mb-4">Below is a breakdown of the spatial defect patterns categorized in the dataset:</p>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {classesInfo.map((c, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.25, delay: idx * 0.04 }}
-              className="glass-card p-5 space-y-3 flex flex-col justify-between"
-            >
-              <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <span className="text-xl">{c.emoji}</span> {c.name}
-                </h3>
-                <div className="mt-2 font-mono text-xs bg-black/40 border border-zinc-800 rounded px-2 py-1 text-primary inline-block">
-                  {c.pattern}
-                </div>
-                <p className="mt-3 text-xs text-zinc-400 leading-relaxed">{c.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <div className="glass-card p-5">
-        <button
-          onClick={() => setShowDetails(!showDetails)}
-          className="flex justify-between items-center w-full text-left font-bold text-white hover:text-primary transition-colors focus:outline-none"
-        >
-          <span>🔍 Dataset Format & Bin Mapping Detail</span>
-          <span className="text-lg">{showDetails ? "▲" : "▼"}</span>
-        </button>
-        {showDetails && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="mt-4 pt-4 border-t border-zinc-800 text-sm text-zinc-400 space-y-3"
-          >
-            <p>In the raw data, wafer maps are represented as 2D integer grids where:</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li><strong className="text-white">0</strong> represents the blank space outside the wafer circle.</li>
-              <li><strong className="text-white">1</strong> represents the normal silicon wafer area (background).</li>
-              <li><strong className="text-white">2</strong> represents a failing bin or defect point.</li>
-            </ul>
-            <p>
-              Deep learning preprocessing extracts these maps, resizes them to <code className="text-white bg-black/40 px-1 py-0.5 rounded">224x224</code> pixels using nearest-neighbor interpolation (which preserves the discrete wafer-bin values instead of blurring them), and feeds them to the EfficientNet-B2 neural network as normalized 3-channel images.
-            </p>
-          </motion.div>
-        )}
       </div>
     </div>
   );
