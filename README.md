@@ -99,4 +99,4 @@ pytest tests/ -v
 
 ## 📄 License
 
-MIT License. Designed and developed for semiconductor defect inspection and yield optimization research.
+MIT [License](License). Designed and developed for semiconductor defect inspection and yield optimization research.
