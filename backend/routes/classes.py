@@ -6,6 +6,16 @@ router = APIRouter()
 async def get_classes():
     return [
         {
+            "name": "none",
+            "emoji": "✅",
+            "pattern": "Nominal / Pass",
+            "desc": "Defect-free clean wafer map with high die yield (>99.5%).",
+            "severity": "Nominal",
+            "yield_impact": "None (Pass)",
+            "cause": "Optimal cleanroom and fabrication process parameters.",
+            "stage": "All Production Stages Passed"
+        },
+        {
             "name": "Center",
             "emoji": "🎯",
             "pattern": "Center Clustered",

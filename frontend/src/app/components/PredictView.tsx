@@ -16,6 +16,7 @@ import {
   Layers,
   Sparkles,
 } from "lucide-react";
+import { API_BASE } from "../../lib/api";
 
 interface TopPrediction {
   class_name: string;
@@ -164,7 +165,7 @@ export default function PredictView() {
         formData.append("file", blob, `${selectedPreset.toLowerCase()}_wafer.png`);
       }
 
-      const res = await fetch("http://localhost:8000/predict", {
+      const res = await fetch(`${API_BASE}/predict`, {
         method: "POST",
         body: formData,
       });

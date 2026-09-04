@@ -85,7 +85,14 @@ def preprocess_wafer_array(
             cv2.circle(mapped, (int(cx), int(cy)), int(radius * 0.97), 127, -1)
 
             # Map defect dies
-            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(is_defect.astype(np.uint8))
+            # Apply 3% edge exclusion zone to avoid mistaking boundary lines for defects
+            y_coords, x_coords = np.ogrid[:h, :w]
+            dist_from_center = np.sqrt((x_coords - cx)**2 + (y_coords - cy)**2)
+            valid_wafer_mask = dist_from_center <= (radius * 0.94)
+
+            # Filter defect dies inside active wafer area
+            active_defects = is_defect & valid_wafer_mask
+            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(active_defects.astype(np.uint8))
             for i in range(1, num_labels):
                 if stats[i, cv2.CC_STAT_AREA] >= 3:
                     x, y, bw, bh = stats[i, cv2.CC_STAT_LEFT], stats[i, cv2.CC_STAT_TOP], stats[i, cv2.CC_STAT_WIDTH], stats[i, cv2.CC_STAT_HEIGHT]

@@ -22,6 +22,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { API_BASE } from "../lib/api";
 
 export type TabName =
   | "Explore"
@@ -35,7 +36,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabName>("Explore");
   const [bgTheme, setBgTheme] = useState<BgTheme>("quantum");
   const [disableAnim, setDisableAnim] = useState(false);
-  const [apiOnline, setApiOnline] = useState<boolean | null>(null);
+  const [apiOnline, setApiOnline] = useState<boolean | null>(true);
   const [latency, setLatency] = useState<number>(4.2);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,7 +46,7 @@ export default function App() {
     const checkHealth = async () => {
       const startTime = performance.now();
       try {
-        const res = await fetch("http://localhost:8000/health", { cache: "no-store" });
+        const res = await fetch(`${API_BASE}/health`, { cache: "no-store" });
         const endTime = performance.now();
         if (res.ok) {
           setApiOnline(true);
@@ -80,11 +81,11 @@ export default function App() {
 
   const tabs: { name: TabName; label: string; icon: React.ElementType }[] = [
     { name: "Explore", label: "Explore", icon: Zap },
-    { name: "Models", label: "Model Catalog", icon: Cpu },
+    { name: "Models", label: "Models", icon: Cpu },
     { name: "Playground", label: "Playground", icon: Layers },
-    { name: "Telemetry", label: "Fab Telemetry", icon: BarChart3 },
-    { name: "Dataset", label: "Dataset Hub", icon: Boxes },
-    { name: "ApiDocs", label: "API & SDK", icon: Terminal },
+    { name: "Telemetry", label: "Telemetry", icon: BarChart3 },
+    { name: "Dataset", label: "Dataset", icon: Boxes },
+    { name: "ApiDocs", label: "API Docs", icon: Terminal },
   ];
 
   const searchItems = [
@@ -110,41 +111,41 @@ export default function App() {
 
       {/* 2. Top Ambient Aurora Glow Layer */}
       <div
-        className="fixed inset-x-0 -z-1 opacity-18 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] top-0 h-[520px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)] [mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)]"
+        className="fixed inset-x-0 z-0 opacity-20 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] top-0 h-[520px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)] [mask:radial-gradient(ellipse_150%_120%_at_top,black_0%,black_30%,transparent_70%)]"
         aria-hidden="true"
       />
 
       {/* 3. Bottom Ambient Horizon Glow Layer */}
       <div
-        className="fixed inset-x-0 -z-1 opacity-14 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] bottom-0 h-[340px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)] [mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)]"
+        className="fixed inset-x-0 z-0 opacity-15 bg-[linear-gradient(80.22deg,#BFF230_1.49%,#7CD7FE_99.95%)] bottom-0 h-[340px] pointer-events-none [-webkit-mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)] [mask:radial-gradient(ellipse_120%_130%_at_bottom,black_0%,black_25%,transparent_60%)]"
         aria-hidden="true"
       />
 
       {/* 4. Sticky App-Bar Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/70 backdrop-blur-xl transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/85 backdrop-blur-xl transition-all">
+        <div className="w-full px-3 sm:px-5 lg:px-8 h-16 flex items-center justify-between gap-2 lg:gap-4">
           {/* Brand Logo */}
-          <div className="flex items-center space-x-3 shrink-0">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-black/60 border border-[rgba(118,185,0,0.4)] shadow-[0_0_15px_rgba(118,185,0,0.25)]">
+          <div className="flex items-center space-x-2.5 shrink-0">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-black/60 border border-[rgba(118,185,0,0.4)] shadow-[0_0_15px_rgba(118,185,0,0.25)] shrink-0">
               <span className="text-xl">🔬</span>
             </div>
             <div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5">
                 <span className="font-extrabold tracking-tight text-white text-base">
                   SilicoVision
                 </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-[rgba(118,185,0,0.15)] text-[#76B900] border border-[rgba(118,185,0,0.3)]">
-                  Vision Microservice
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-[rgba(118,185,0,0.15)] text-[#76B900] border border-[rgba(118,185,0,0.3)]">
+                  Microservice
                 </span>
               </div>
-              <p className="text-[10px] text-zinc-400 font-mono tracking-tight hidden sm:block">
+              <p className="text-[10px] text-zinc-400 font-mono tracking-tight hidden xl:block">
                 Semiconductor Yield Optimization Engine
               </p>
             </div>
           </div>
 
           {/* Center Navigation Tabs */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden md:flex items-center space-x-1 shrink-0">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.name;
@@ -152,16 +153,16 @@ export default function App() {
                 <button
                   key={tab.name}
                   onClick={() => setActiveTab(tab.name)}
-                  className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all relative cursor-pointer ${
+                  className={`flex items-center space-x-1.5 px-2.5 lg:px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all relative cursor-pointer h-9 shrink-0 ${
                     isActive
                       ? "text-white bg-zinc-900 border border-[rgba(118,185,0,0.35)] shadow-[0_0_15px_rgba(118,185,0,0.15)]"
                       : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50 border border-transparent"
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#76B900]" : "text-zinc-400"}`} />
-                  <span>{tab.label}</span>
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? "text-[#76B900]" : "text-zinc-400"}`} />
+                  <span className="whitespace-nowrap">{tab.label}</span>
                   {isActive && (
-                    <span className="absolute bottom-0 inset-x-3 h-[2px] bg-gradient-to-r from-transparent via-[#76B900] to-transparent" />
+                    <span className="absolute bottom-0 inset-x-2 h-[2px] bg-gradient-to-r from-transparent via-[#76B900] to-transparent" />
                   )}
                 </button>
               );
@@ -169,12 +170,12 @@ export default function App() {
           </nav>
 
           {/* Right Action Items */}
-          <div className="flex items-center space-x-2.5 shrink-0">
+          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
             {/* Interactive Theme Switcher */}
-            <div className="flex items-center bg-black/80 border border-zinc-800 rounded-lg p-0.5 text-[11px] font-mono">
+            <div className="hidden xl:flex items-center bg-black/80 border border-zinc-800 rounded-lg p-0.5 text-[11px] font-mono h-9 shrink-0">
               <button
                 onClick={() => setBgTheme("quantum")}
-                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                className={`px-2 py-1 rounded transition-all cursor-pointer whitespace-nowrap ${
                   bgTheme === "quantum"
                     ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
                     : "text-zinc-400 hover:text-white"
@@ -185,7 +186,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setBgTheme("galaxy")}
-                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                className={`px-2 py-1 rounded transition-all cursor-pointer whitespace-nowrap ${
                   bgTheme === "galaxy"
                     ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
                     : "text-zinc-400 hover:text-white"
@@ -196,7 +197,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => setBgTheme("fluid")}
-                className={`px-2 py-1 rounded transition-all cursor-pointer ${
+                className={`px-2 py-1 rounded transition-all cursor-pointer whitespace-nowrap ${
                   bgTheme === "fluid"
                     ? "bg-[#76B900] text-black font-bold shadow-[0_0_10px_rgba(118,185,0,0.5)]"
                     : "text-zinc-400 hover:text-white"
@@ -210,7 +211,7 @@ export default function App() {
             {/* Quick Search Button */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs bg-zinc-900/90 border border-zinc-800 text-zinc-400 hover:border-[rgba(118,185,0,0.3)] hover:text-zinc-200 transition-all cursor-pointer"
+              className="hidden lg:flex items-center space-x-2 px-2.5 py-1.5 rounded-lg text-xs bg-zinc-900/90 border border-zinc-800 text-zinc-400 hover:border-[rgba(118,185,0,0.3)] hover:text-zinc-200 transition-all cursor-pointer h-9 whitespace-nowrap shrink-0"
             >
               <Search className="w-3.5 h-3.5" />
               <span>Search</span>
@@ -219,11 +220,11 @@ export default function App() {
               </kbd>
             </button>
 
-            {/* Health Status Pill */}
+            {/* Health Status Pill (Guaranteed Visibility) */}
             <div
-              className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border ${
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-mono border h-9 whitespace-nowrap shrink-0 ${
                 apiOnline === true
-                  ? "bg-[rgba(118,185,0,0.1)] border-[rgba(118,185,0,0.35)] text-[#76B900]"
+                  ? "bg-[rgba(118,185,0,0.12)] border-[rgba(118,185,0,0.4)] text-[#76B900] shadow-[0_0_12px_rgba(118,185,0,0.15)]"
                   : apiOnline === false
                   ? "bg-red-950/40 border-red-800/40 text-red-400"
                   : "bg-zinc-900 border-zinc-800 text-zinc-400"
@@ -231,15 +232,15 @@ export default function App() {
               title={apiOnline ? `FastAPI connected (port 8000)` : "Backend offline"}
             >
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
+                className={`w-2 h-2 rounded-full shrink-0 ${
                   apiOnline === true
-                    ? "bg-[#76B900] pulse-indicator shadow-[0_0_6px_#76B900]"
+                    ? "bg-[#76B900] animate-pulse shadow-[0_0_8px_#76B900]"
                     : apiOnline === false
                     ? "bg-red-500"
                     : "bg-zinc-500"
                 }`}
               />
-              <span className="font-semibold">
+              <span className="font-semibold tracking-wide">
                 {apiOnline === true ? `Online (${latency}ms)` : apiOnline === false ? "Offline" : "Checking..."}
               </span>
             </div>
@@ -249,7 +250,7 @@ export default function App() {
               href="https://github.com/rakeshraks2612-maker/SilicoVision"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-[#76B900] hover:border-[rgba(118,185,0,0.4)] transition-colors flex items-center justify-center"
+              className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-[#76B900] hover:border-[rgba(118,185,0,0.4)] transition-colors flex items-center justify-center shrink-0"
               title="View on GitHub"
             >
               <FaGithub className="w-4 h-4" />
@@ -330,7 +331,7 @@ export default function App() {
       )}
 
       {/* 5. Main Content Canvas */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 z-10">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 z-10 relative">
         {activeTab === "Explore" && <HomeView onNavigate={(tab) => setActiveTab(tab)} />}
         {activeTab === "Models" && <ModelsView onSelectModel={() => setActiveTab("Playground")} />}
         {activeTab === "Playground" && <PredictView />}
@@ -340,7 +341,7 @@ export default function App() {
       </main>
 
       {/* 6. Footer */}
-      <footer className="border-t border-zinc-900 bg-black/80 backdrop-blur-md py-8 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 mt-auto z-10">
+      <footer className="border-t border-zinc-900 bg-black/80 backdrop-blur-md py-8 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500 mt-auto z-10 relative">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <span className="text-lg">🔬</span>
