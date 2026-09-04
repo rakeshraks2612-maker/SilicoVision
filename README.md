@@ -16,7 +16,7 @@ SilicoVision is an enterprise-grade computer vision and deep learning system eng
 
 | Service | Endpoint / URL | Description |
 |---|---|---|
-| **Live Web Dashboard** | `https://expand-premier-flex-ira.trycloudflare.com` | Public live HTTPS dashboard with interactive 3D particle canvas & Playground |
+| **Live Web Dashboard** | (https://expand-premier-flex-ira.trycloudflare.com) | Public live HTTPS dashboard with interactive 3D particle canvas & Playground |
 | **Local Dashboard** | `http://localhost:3000` | Next.js 16 full-stack production dashboard |
 | **FastAPI Backend** | `http://localhost:8000` | High-performance Python PyTorch inference server |
 | **Interactive Swagger API Docs** | `http://localhost:8000/docs` | OpenAPI documentation and interactive endpoint testing |
