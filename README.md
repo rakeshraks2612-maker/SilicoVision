@@ -134,12 +134,52 @@ npm run start -- -p 3000
 
 ---
 
-### 4. Running a Public Live URL (Cloudflare Tunnel)
+---
 
-To share the running dashboard publicly on a live HTTPS link:
+### 4. Permanent Cloud Deployment (Render)
+
+SilicoVision includes a production-grade multi-stage `Dockerfile` and `render.yaml` Blueprint for 100% free, 1-click permanent deployment on Render.
+
+#### Option A: 1-Click Render Blueprint (Recommended)
+1. Fork or push this repository to your GitHub account:
+   ```bash
+   git add .
+   git commit -m "feat: configure permanent Render deployment & weights"
+   git push origin main
+   ```
+2. Navigate to [dashboard.render.com](https://dashboard.render.com/) and click **New +** > **Blueprint**.
+3. Connect your `SilicoVision` repository.
+4. Render automatically reads [`render.yaml`](render.yaml) and provisions the Web Service with Docker, health checks (`/health`), and dynamic port binding.
+5. Your platform will be permanently live on a dedicated HTTPS domain (e.g., `https://silicovision.onrender.com`).
+
+#### Option B: Render Web Service via Docker
+1. In Render Dashboard, click **New +** > **Web Service**.
+2. Connect your `SilicoVision` GitHub repository.
+3. Select **Docker** as the Environment runtime.
+4. Set Health Check Path to `/health`.
+5. Click **Create Web Service**.
+
+> **Note on Model Weights**: The 88.9MB trained EfficientNet-B2 weights (`checkpoints/efficientnet_b2_wm811k/best.pt`) are un-ignored and packaged for deployment. Alternatively, you can specify an external download link by setting the `MODEL_WEIGHTS_URL` environment variable in your Render dashboard.
+
+---
+
+### 5. Running with Docker Locally
+
 ```bash
-cloudflared tunnel --url http://localhost:3000
+docker build -t silicovision:latest .
+docker run -p 8000:8000 silicovision:latest
 ```
+Access the unified application and Swagger docs at `http://localhost:8000`.
+
+---
+
+### 6. Ephemeral Quick Testing (Cloudflare Tunnel)
+
+To temporarily expose a local running instance without cloud deployment:
+```bash
+cloudflared tunnel --url http://localhost:8000
+```
+*(Note: `trycloudflare.com` quick tunnels are temporary and regenerate a new URL each time the process restarts. For permanent 24/7 uptime, use the Render deployment above).*
 
 ---
 

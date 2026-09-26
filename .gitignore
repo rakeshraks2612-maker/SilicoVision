@@ -54,6 +54,7 @@ checkpoints/**/*.pth
 checkpoints/**/*.onnx
 !checkpoints/**/.gitkeep
 !checkpoints/.gitkeep
+!checkpoints/efficientnet_b2_wm811k/best.pt
 
 # Frontend & Node
 frontend/node_modules/

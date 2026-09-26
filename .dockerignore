@@ -1,0 +1,16 @@
+.git
+.github
+.agents
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+*.log
+frontend/node_modules
+frontend/.next
+frontend/out
+logs/
+New folder/
+*.zip

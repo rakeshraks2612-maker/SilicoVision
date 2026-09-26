@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: silicovision
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHONUNBUFFERED
+        value: "1"
