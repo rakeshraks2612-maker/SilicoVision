@@ -27,7 +27,7 @@ export default function ApiDocsView() {
       method: "POST",
       path: "/predict",
       desc: "Upload a wafer map image (.png, .jpg) or 2D numpy matrix (.npy) to get real-time defect classification and candidate probabilities.",
-      requestExample: `curl -X POST "http://localhost:8000/predict" \\
+      requestExample: `curl -X POST "https://silicovision.onrender.com/predict" \\
   -H "accept: application/json" \\
   -H "Content-Type: multipart/form-data" \\
   -F "file=@wafer_map.png"`,
@@ -45,7 +45,7 @@ export default function ApiDocsView() {
       method: "GET",
       path: "/metrics",
       desc: "Fetch current model benchmark metrics, per-class precision/recall, and macro ROC-AUC.",
-      requestExample: `curl -X GET "http://localhost:8000/metrics" \\
+      requestExample: `curl -X GET "https://silicovision.onrender.com/metrics" \\
   -H "accept: application/json"`,
       responseExample: `{
   "accuracy": 0.8311,
@@ -58,7 +58,7 @@ export default function ApiDocsView() {
       method: "GET",
       path: "/classes",
       desc: "List all 8 supported semiconductor defect archetypes and their corresponding index encodings.",
-      requestExample: `curl -X GET "http://localhost:8000/classes"`,
+      requestExample: `curl -X GET "https://silicovision.onrender.com/classes"`,
       responseExample: `{
   "classes": [
     "Center", "Donut", "Edge-Loc", "Edge-Ring", 
@@ -70,7 +70,7 @@ export default function ApiDocsView() {
       method: "GET",
       path: "/health",
       desc: "FastAPI health check probe to monitor microservice availability and inference model load status.",
-      requestExample: `curl -X GET "http://localhost:8000/health"`,
+      requestExample: `curl -X GET "https://silicovision.onrender.com/health"`,
       responseExample: `{
   "status": "healthy",
   "model_loaded": true,

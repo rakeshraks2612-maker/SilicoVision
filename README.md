@@ -16,10 +16,11 @@ SilicoVision is an enterprise-grade computer vision and deep learning system eng
 
 | Service | Endpoint / URL | Description |
 |---|---|---|
-| **Live Web Dashboard** | [LIVE-DASHBOARD](https://expand-premier-flex-ira.trycloudflare.com) | Public live HTTPS dashboard with interactive 3D particle canvas & Playground |
-| **Local Dashboard** | `http://localhost:3000` | Next.js 16 full-stack production dashboard |
-| **FastAPI Backend** | `http://localhost:8000` | High-performance Python PyTorch inference server |
-| **Interactive Swagger API Docs** | `http://localhost:8000/docs` | OpenAPI documentation and interactive endpoint testing |
+| **Live Web Dashboard** | [silicovision.onrender.com](https://silicovision.onrender.com/) | Permanent 24/7 HTTPS dashboard with interactive 3D particle canvas & Playground |
+| **Live Swagger API Docs** | [silicovision.onrender.com/docs](https://silicovision.onrender.com/docs) | Interactive OpenAPI documentation & live test interface |
+| **Live Inference API** | `https://silicovision.onrender.com/predict` | Production PyTorch wafer map classification endpoint |
+| **Health Check Telemetry** | [silicovision.onrender.com/health](https://silicovision.onrender.com/health) | Container health & inference device status |
+| **Local Dashboard** | `http://localhost:3000` (or `8000`) | Local Next.js 16 & FastAPI development environments |
 | **GitHub Repository** | [rakeshraks2612-maker/SilicoVision](https://github.com/rakeshraks2612-maker/SilicoVision) | Source code, models, and evaluation pipelines |
 
 ---
@@ -187,13 +188,14 @@ cloudflared tunnel --url http://localhost:8000
 
 ### Wafer Classification (`POST /predict`)
 
-#### Example with cURL:
+#### Example with cURL (Live Cloud API):
 ```bash
-curl -X POST "http://localhost:8000/predict" \
+curl -X POST "https://silicovision.onrender.com/predict" \
   -H "accept: application/json" \
   -H "Content-Type: multipart/form-data" \
   -F "file=@sample_wafer.png"
 ```
+*(Or use `http://localhost:8000/predict` when running locally)*
 
 #### Example Response:
 ```json

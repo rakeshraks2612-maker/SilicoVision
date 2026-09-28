@@ -254,7 +254,8 @@ print(f"Predicted Defect: {response.predicted_class} ({response.confidence * 100
 print("Top 3 Candidates:", response.top_predictions)`,
     "python-req": `import requests
 
-url = "http://localhost:8000/predict"
+# Live Render endpoint (or use http://localhost:8000/predict locally)
+url = "https://silicovision.onrender.com/predict"
 files = {"file": open("wafer_map.png", "rb")}
 
 response = requests.post(url, files=files)
@@ -263,7 +264,8 @@ print("Prediction:", result)`,
     js: `const formData = new FormData();
 formData.append("file", fileInput.files[0]);
 
-const response = await fetch("http://localhost:8000/predict", {
+// Live Render endpoint (or use http://localhost:8000/predict locally)
+const response = await fetch("https://silicovision.onrender.com/predict", {
   method: "POST",
   body: formData,
 });
